@@ -3,7 +3,7 @@ import { migrate } from "drizzle-orm/postgres-js/migrator";
 import postgres from "postgres";
 import { db } from "~/lib/db";
 import { vectorDatabases } from "~/lib/db/schema";
-import { neonApiClient } from "~/lib/vector-db";
+import { neonApi } from "~/lib/vector-db";
 
 const main = async () => {
 	try {
@@ -14,20 +14,7 @@ const main = async () => {
 			const { vectorDbId } = database;
 
 			try {
-				const getProject = await neonApiClient.GET(
-					"/projects/{project_id}/connection_uri",
-					{
-						params: {
-							path: {
-								project_id: vectorDbId,
-							},
-							query: {
-								role_name: "neondb_owner",
-								database_name: "neondb",
-							},
-						},
-					},
-				);
+				const getProject = await neonApi.getConnectionUri(vectorDbId);
 
 				const connectionString = getProject.data?.uri;
 

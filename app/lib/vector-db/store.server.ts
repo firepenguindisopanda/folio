@@ -2,20 +2,12 @@ import { NeonPostgres } from "@langchain/community/vectorstores/neon";
 import postgres from "postgres";
 import { createEmbeddings } from "~/lib/ai.server";
 import type { DocRef } from "~/lib/doc-refs";
-import { neonApiClient } from "~/lib/vector-db";
+import { neonApi } from "~/lib/vector-db";
 
 export const getVectorDbUri = async (vectorDbId: string) => {
-	const { data, error } = await neonApiClient.GET(
-		"/projects/{project_id}/connection_uri",
-		{
-			params: {
-				path: { project_id: vectorDbId },
-				query: { role_name: "neondb_owner", database_name: "neondb" },
-			},
-		},
-	);
+	const { data, error } = await neonApi.getConnectionUri(vectorDbId);
 
-	if (error) {
+	if (!data) {
 		throw new Error(
 			`Failed to get vector database connection, ${JSON.stringify(error)}`,
 		);

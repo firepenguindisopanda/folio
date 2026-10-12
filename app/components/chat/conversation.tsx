@@ -265,7 +265,9 @@ export const Conversation = ({
 						messages.map((message, index) =>
 							message.role === "user" ? (
 								<UserMessage key={message.id} content={message.content} />
-							) : (
+							) : error &&
+								index === messages.length - 1 &&
+								!message.content ? null : (
 								<AssistantMessage
 									key={message.id}
 									message={message}
