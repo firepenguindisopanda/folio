@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS "embeddings_document_id_idx" ON "embeddings" USING btree (("metadata"->>'documentId'));
